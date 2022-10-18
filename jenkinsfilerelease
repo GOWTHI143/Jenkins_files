@@ -23,9 +23,16 @@ pipeline {
                 rtMavenRun(
                     tool: 'MAVEN', // Tool name from Jenkins configuration
                     pom: 'pom.xml',
-                    goals: 'mvn package' ,
+                    goals: 'clean install' ,
                     deployerId: 'MAVEN_DEPLOYER'
                      )
+            }
+        }
+        stage ('publish') {
+             steps {
+                rtPublishBuildInfo (
+                    serverId: 'MY_JFROG'
+                )
             }
         }
     }
