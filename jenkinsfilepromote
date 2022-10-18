@@ -1,0 +1,20 @@
+pipeline{
+    agent {label 'Node-1'}
+    triggers {
+        cron ('0 17 * * *')
+    }
+    stages{
+        stage ('vcs'){
+            steps {
+                git branch :'release',
+                url:'https://github.com/GOWTHI143/shopizer.git'
+            }
+        }
+        stage ('merging'){
+            steps{
+                sh """git pull https://github.com/GOWTHI143/shopizer.git
+                       git merge --no-ff --into-release develop"""
+            }
+        }
+    }
+}

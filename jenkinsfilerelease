@@ -1,0 +1,32 @@
+pipeline {
+    agent { label 'Node' }
+    triggers {
+        cron ('30 17 * * *')
+    }
+    stages {
+        stage('scm') {
+            steps{
+                git branch:'release', url:'https://github.com/GOWTHI143/shopizer.git'
+            }
+        }
+        stage('Artifactory Configuration') {
+            steps {
+                rtMavenDeployer (
+                    id: 'MAVEN_DEPLOYER',
+                    serverId: 'MY_ARTIFACTORY',
+                    releaseRepo:'gow-libs-release-local',
+                    snapshotRepo: 'gow-libs-snapshot-local' 
+                    )}
+        }
+        stage ('Exec Maven') {
+            steps {
+                rtMavenRun(
+                    tool: 'MAVEN', // Tool name from Jenkins configuration
+                    pom: 'pom.xml',
+                    goals: 'mvn package' ,
+                    deployerId: 'MAVEN_DEPLOYER'
+                     )
+            }
+        }
+    }
+}
