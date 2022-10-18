@@ -13,7 +13,7 @@ pipeline {
             steps {
                 rtMavenDeployer (
                     id: 'MAVEN_DEPLOYER',
-                    serverId: 'MY_ARTIFACTORY',
+                    serverId: 'MY_JFROG',
                     releaseRepo:'gow-libs-release-local',
                     snapshotRepo: 'gow-libs-snapshot-local' 
                     )}
