@@ -6,13 +6,12 @@ pipeline{
     stages{
         stage ('vcs'){
             steps {
-                git branch :'release',
-                url:'git@github.com:GOWTHI143/shopizer.git'
+                git url:'git@github.com:GOWTHI143/shopizer.git'
             }
         }
         stage ('merging'){
             steps{
-                sh """git pull https://github.com/GOWTHI143/shopizer.git
+                sh """git pull git@github.com:GOWTHI143/shopizer.git
                       git checkout release
                        git merge  develop --no-ff """
             }
