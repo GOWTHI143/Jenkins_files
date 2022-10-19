@@ -6,33 +6,20 @@ pipeline {
     stages {
         stage('scm') {
             steps{
-                git branch:'develop', url:'https://github.com/GOWTHI143/shopizer.git'
+                git branch:'develop', url:'https://github.com/GOWTHI143/spring-petclinic.git'
             }
         }
-        stage('Artifactory Configuration') {
-            steps {
-                rtMavenDeployer (
-                    id: 'MAVEN_DEPLOYER',
-                    serverId: 'MY_JFROG',
-                    releaseRepo:'sai-libs-release-local',
-                    snapshotRepo: 'sai-libs-snapshot-local' 
-                    )}
+        stage ('build') {
+            steps{
+                 sh "mvn install"
+            }
+           
         }
-        stage ('Exec Maven') {
-            steps {
-                rtMavenRun(
-                    tool: 'maven-1', // Tool name from Jenkins configuration
-                    pom: 'pom.xml',
-                    goals: ' clean install' ,
-                    deployerId: 'MAVEN_DEPLOYER'
-                     )
+        stage ('archive'){
+            steps{
+                archiveArtifacts artifacts: '**/target/*.jar',
+                junit '**/surefire-reports/*.xml'
             }
         }
-        stage ('Publish build info') {
-            steps {
-                rtPublishBuildInfo (
-                    serverId: "MY_JFROG" )
-            }
-       }
-    }
+   }
 }

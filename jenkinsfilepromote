@@ -6,14 +6,15 @@ pipeline{
     stages{
         stage ('vcs'){
             steps {
-                git url:'git@github.com:GOWTHI143/shopizer.git'
+                git url:'git@github.com:GOWTHI143/spring-petclinic.git'
             }
         }
         stage ('merging'){
             steps{
-                sh """git pull git@github.com:GOWTHI143/shopizer.git
+                sh """git pull --all
                       git checkout release
-                       git merge  develop --no-ff """
+                      git merge develop --no-ff
+                      git push origin release """
             }
         }
     }
